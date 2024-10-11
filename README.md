@@ -1,6 +1,3 @@
-### README.md Content for Your Weather Dashboard
-
-```markdown
 # Weather Dashboard
 
 ## Overview
@@ -37,7 +34,6 @@ The Weather Dashboard is a web application that provides real-time weather data,
    ```bash
    git clone https://github.com/your-username/weather-dashboard.git
    cd weather-dashboard
-   ```
 
 2. Open the `index.html` file in your preferred web browser.
 
@@ -55,3 +51,4 @@ To use the application, you need to include your own OpenWeatherMap API key:
    ```javascript
    const API_KEY = 'your_api_key_here';
    ```
+   
