@@ -8,6 +8,70 @@ let map;
 let marker;
 let tempNewLayer; // New layer for temperature map
 
+// Function to get latitude and longitude using the Geolocation API
+function getUserLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const { latitude, longitude } = position.coords;
+                console.log(`User's location: Latitude: ${latitude}, Longitude: ${longitude}`);
+                await getWeatherByCoordinates(latitude, longitude);
+                initMap(latitude, longitude);
+            },
+            (error) => {
+                console.error('Error getting user location:', error.message);
+                alert('Unable to retrieve your location. Please enter a city name instead.');
+            }
+        );
+    } else {
+        alert('Geolocation is not supported by your browser. Please enter a city name.');
+    }
+}
+
+// Function to get weather data using coordinates
+async function getWeatherByCoordinates(lat, lon) {
+    const currentWeatherUrl = `${CURRENT_WEATHER_URL}?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`;
+    try {
+        const response = await fetch(currentWeatherUrl);
+        if (!response.ok) throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        const data = await response.json();
+        displayCurrentWeather(data);
+        await getThreeHourForecastByCity(lat, lon);
+    } catch (error) {
+        console.error('Error fetching weather data by coordinates:', error.message);
+        alert('Failed to fetch weather data for your current location.');
+    }
+}
+
+// Initialize the map with given latitude and longitude
+function initMap(lat, lon) {
+    if (!map) {
+        // Create the map only if it doesn't already exist
+        map = L.map('map').setView([lat, lon], 11);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Add a marker to the user's location
+        marker = L.marker([lat, lon]).addTo(map);
+
+        // Optional: Add weather layer for visualization
+        tempNewLayer = L.tileLayer(`https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=${API_KEY}`, {
+            attribution: 'Weather data © OpenWeatherMap',
+            opacity: 0.6
+        }).addTo(map);
+    } else {
+        // Update map position if it already exists
+        map.setView([lat, lon], 11);
+        if (marker) {
+            marker.setLatLng([lat, lon]);
+        } else {
+            marker = L.marker([lat, lon]).addTo(map);
+        }
+    }
+}
+
 // Function to get latitude and longitude from city name using OpenWeatherMap Geocoding API
 async function getCoordinatesByCity(city) {
     const geocodeURL = `${GEOCODE_URL}?q=${city}&limit=5&appid=${API_KEY}`;
@@ -16,7 +80,7 @@ async function getCoordinatesByCity(city) {
         if (!response.ok) throw new Error(`Error: ${response.status} - ${response.statusText}`);
         const locations = await response.json();
         if (locations && locations.length > 0) {
-            // Return the first result's latitude and longitude
+            console.log(`City: ${city} | Latitude: ${locations[0].lat}, Longitude: ${locations[0].lon}`);
             return { lat: locations[0].lat, lon: locations[0].lon };
         } else {
             throw new Error('No coordinates found for the entered city.');
@@ -25,27 +89,6 @@ async function getCoordinatesByCity(city) {
         console.error('Error fetching coordinates:', error.message);
         alert('Failed to fetch coordinates for the entered city.');
         return null;
-    }
-}
-
-// Initialize the map
-function initMap(lat, lon) {
-    // Create map if it doesn't exist
-    if (!map) {
-        map = L.map('map').setView([lat, lon], 12);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-        // Add new temperature layer
-        tempNewLayer = L.tileLayer(`https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=${API_KEY}`, {
-            attribution: 'Weather data © OpenWeatherMap',
-            opacity: 0.5
-        }).addTo(map);
-    } else {
-        // Update the map position
-        map.setView([lat, lon], 13);
     }
 }
 
@@ -214,3 +257,6 @@ document.getElementById('cityInput').addEventListener('keydown', async (event) =
         }
     }
 });
+
+// Call getUserLocation on page load to get weather data for user's location
+window.addEventListener('load', getUserLocation);

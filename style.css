@@ -147,6 +147,7 @@ h2 {
 }
 
 .hourly-forecast .forecast-table th {
+    color: white;
     background-color: #118fa0;
     font-weight: bold;
 }
