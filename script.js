@@ -1,11 +1,32 @@
 const API_KEY = 'b1874e8463abeeb77801729dc9ce5eac';
 const CURRENT_WEATHER_URL = 'https://api.openweathermap.org/data/2.5/weather';
 const FORECAST_URL = 'https://api.openweathermap.org/data/2.5/forecast';
+const GEOCODE_URL = 'http://api.openweathermap.org/geo/1.0/direct';
 
 let chartInstance;
 let map;
 let marker;
 let tempNewLayer; // New layer for temperature map
+
+// Function to get latitude and longitude from city name using OpenWeatherMap Geocoding API
+async function getCoordinatesByCity(city) {
+    const geocodeURL = `${GEOCODE_URL}?q=${city}&limit=5&appid=${API_KEY}`;
+    try {
+        const response = await fetch(geocodeURL);
+        if (!response.ok) throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        const locations = await response.json();
+        if (locations && locations.length > 0) {
+            // Return the first result's latitude and longitude
+            return { lat: locations[0].lat, lon: locations[0].lon };
+        } else {
+            throw new Error('No coordinates found for the entered city.');
+        }
+    } catch (error) {
+        console.error('Error fetching coordinates:', error.message);
+        alert('Failed to fetch coordinates for the entered city.');
+        return null;
+    }
+}
 
 // Initialize the map
 function initMap(lat, lon) {
@@ -166,16 +187,30 @@ function plotHourlyGraph(data) {
 }
 
 // Event listeners for search functionality
-document.getElementById('search-btn').addEventListener('click', () => {
+document.getElementById('search-btn').addEventListener('click', async () => {
     const city = document.getElementById('cityInput').value.trim();
-    if (city) getWeatherByCity(city);
-    else alert('Please enter a valid city name.');
+    if (city) {
+        const coordinates = await getCoordinatesByCity(city);
+        if (coordinates) {
+            getWeatherByCity(city);
+            initMap(coordinates.lat, coordinates.lon);
+        }
+    } else {
+        alert('Please enter a valid city name.');
+    }
 });
 
-document.getElementById('cityInput').addEventListener('keydown', (event) => {
+document.getElementById('cityInput').addEventListener('keydown', async (event) => {
     if (event.key === 'Enter') {
         const city = document.getElementById('cityInput').value.trim();
-        if (city) getWeatherByCity(city);
-        else alert('Please enter a valid city name.');
+        if (city) {
+            const coordinates = await getCoordinatesByCity(city);
+            if (coordinates) {
+                getWeatherByCity(city);
+                initMap(coordinates.lat, coordinates.lon);
+            }
+        } else {
+            alert('Please enter a valid city name.');
+        }
     }
 });
