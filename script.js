@@ -91,7 +91,7 @@ function displayThreeHourForecast(data) {
             <tbody>
     `;
     
-    for (let i = 0; i < 4; i++) { // Loop through the first 4 entries
+    for (let i = 0; i < 6; i++) { // Loop through the first 4 entries
         const forecast = data.list[i];
         const date = new Date(forecast.dt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         const temp = `${forecast.main.temp}°C`;
@@ -119,8 +119,8 @@ function displayThreeHourForecast(data) {
 // Plot hourly forecast on a graph
 function plotHourlyGraph(data) {
     const ctx = document.getElementById('forecastGraph').getContext('2d');
-    const times = data.slice(0, 4).map(forecast => new Date(forecast.dt * 1000).toLocaleTimeString()); // First 4 intervals
-    const temps = data.slice(0, 4).map(forecast => forecast.main.temp);
+    const times = data.slice(0, 6).map(forecast => new Date(forecast.dt * 1000).toLocaleTimeString()); // First 4 intervals
+    const temps = data.slice(0, 6).map(forecast => forecast.main.temp);
 
     // Destroy the previous chart instance if it exists to avoid overlap
     if (chartInstance) {

@@ -18,27 +18,34 @@
         <!-- Current Weather Section -->
         <div class="box current-weather">
             <h2>CURRENT WEATHER</h2>
-            <div id="currentWeather"></div>
+            <div class="box-content">
+                <div id="currentWeather"></div>
+            </div>
         </div>
-
-        <!-- OpenStreetMap Section -->
+        
+        <!-- OpenStreetMap Box -->
         <div class="box openstreet-map">
             <h2>OPENSTREET MAP</h2>
-            <div id="map"></div>
+            <div class="box-content">
+                <div id="map"></div>
+            </div>
         </div>
-
-        <!-- Hourly Forecast Section -->
+        
+        <!-- Hourly Forecast Box -->
         <div class="box hourly-forecast">
-            <h2>Hourly forecast</h2>
-            <div id="hourlyForecast"></div>
+            <h2>3-HOUR FORECAST</h2>
+            <div class="box-content">
+                <div id="hourlyForecast"></div>
+            </div>
         </div>
-
-        <!-- Hourly Forecast Graph Section -->
+        
+        <!-- Hourly Forecast Graph Box -->
         <div class="box hourly-forecast-graph">
-            <h2>hourly forecast graph</h2>
-            <canvas id="forecastGraph"></canvas>
+            <h2>3-HOUR FORECAST GRAPH</h2>
+            <div class="box-content">
+                <canvas id="forecastGraph"></canvas>
+            </div>
         </div>
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>

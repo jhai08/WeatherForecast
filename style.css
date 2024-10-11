@@ -9,9 +9,9 @@ body {
 .container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto auto;
-    gap: 20px;
-    max-width: 1200px;
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
+    max-width: 1500px;
     margin: 0 auto;
 }
 
@@ -53,56 +53,119 @@ body {
     background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
 }
 
-/* Center Only the Titles */
+/* Title Styling */
 h2 {
-    font-size: 24px;
+    font-size: 22px;
     color: #333;
-    margin: 0; /* Remove default margin */
-    padding: 10px 0; /* Add some padding around the title */
-    text-align: center; /* Center the title text */
-    border-bottom: 2px solid #1a73e8; /* Add underline for emphasis */
-    width: 100%; /* Ensure title spans full width of container */
+    margin: 0;
+    padding: 10px 0;
+    text-align: center;
+    border-bottom: 2px solid #1a73e8;
+    width: calc(100% - 40px);
+    margin: 0 auto;
+    background: #fff;
+    z-index: 2;
+    box-sizing: border-box;
 }
 
-/* Current Weather Section */
+/* Align Content Vertically in Containers */
+.box-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+    padding: 30px 20px 20px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
 .current-weather {
     grid-column: 1 / 2;
     grid-row: 1 / 2;
-    height: 300px;
 }
 
-/* Map Styling */
+.current-weather h2 {
+    margin-top: 0;
+}
+
+.current-weather .box-content {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.current-weather .location {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+/* Map Container Styling */
 .openstreet-map {
-    position: relative;
     grid-column: 2 / 3;
     grid-row: 1 / 2;
-    height: 300px;
 }
 
 #map {
     width: 100%;
-    height: 100%;
+    height: calc(95% - 10px);
     border-radius: 12px;
+    z-index: 1;
 }
 
-/* Hourly Forecast Styling */
+/* Hourly Forecast Container Styling */
 .hourly-forecast {
     grid-column: 1 / 2;
     grid-row: 2 / 3;
-    height: 300px;
-    overflow-y: auto;
+}
+
+.hourly-forecast .forecast-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.hourly-forecast .forecast-table th,
+.hourly-forecast .forecast-table td {
+    padding: 5px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    font-size: 20px;
+}
+
+.hourly-forecast .forecast-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.hourly-forecast .forecast-table tbody tr:hover {
+    background-color: #f1f8ff;
+}
+
+.forecast-icon {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
 }
 
 .hourly-forecast-graph {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
-    height: 300px;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
-/* Additional Styling for Responsive Design */
+.hourly-forecast-graph canvas {
+    margin-top: 20px;
+    height: calc(100% - 40px);
+    width: 100%;
+}
+
+/* Responsive Design for Smaller Screens */
 @media (max-width: 768px) {
     .container {
         grid-template-columns: 1fr;
@@ -113,9 +176,5 @@ h2 {
     .hourly-forecast,
     .hourly-forecast-graph {
         width: 100%;
-    }
-
-    #map {
-        height: 250px;
     }
 }
