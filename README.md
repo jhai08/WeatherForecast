@@ -1,3 +1,6 @@
+### README.md Content for Your Weather Dashboard
+
+```markdown
 # Weather Dashboard
 
 ## Overview
@@ -34,3 +37,21 @@ The Weather Dashboard is a web application that provides real-time weather data,
    ```bash
    git clone https://github.com/your-username/weather-dashboard.git
    cd weather-dashboard
+   ```
+
+2. Open the `index.html` file in your preferred web browser.
+
+3. The application will load and you can start searching for weather data by entering a city name.
+
+## Files Structure
+- **index.html:** Main HTML file containing the layout and structure of the application.
+- **style.css:** CSS file for styling the application layout and components.
+- **script.js:** JavaScript file containing the functionality for fetching data from APIs, displaying weather information, and managing the map.
+
+## API Configuration
+To use the application, you need to include your own OpenWeatherMap API key:
+1. Sign up at [OpenWeatherMap](https://home.openweathermap.org/users/sign_up) to get your API key.
+2. Replace the `API_KEY` variable in the `script.js` file with your own API key:
+   ```javascript
+   const API_KEY = 'your_api_key_here';
+   ```
