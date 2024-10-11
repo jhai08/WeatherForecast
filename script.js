@@ -3,6 +3,22 @@ const CURRENT_WEATHER_URL = 'https://api.openweathermap.org/data/2.5/weather';
 const FORECAST_URL = 'https://api.openweathermap.org/data/2.5/forecast';
 
 let chartInstance; // Variable to store the chart instance
+let map; // Variable for the map instance
+let marker; // Variable for the marker
+
+// Initialize the map
+function initMap(lat, lon) {
+    // Create map if it doesn't exist
+    if (!map) {
+        map = L.map('map').setView([lat, lon], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+    } else {
+        // Update the map position
+        map.setView([lat, lon], 13);
+    }
+}
 
 // Fetch current weather by city name
 async function getWeatherByCity(city) {
@@ -14,6 +30,7 @@ async function getWeatherByCity(city) {
         displayCurrentWeather(data);
         const { lat, lon } = data.coord;
         await getThreeHourForecastByCity(lat, lon); // Fetch 3-hour forecast using latitude and longitude
+        initMap(lat, lon); // Initialize or update the map view with the current city coordinates
     } catch (error) {
         console.error('Error fetching weather data by city:', error.message);
         alert('Failed to fetch weather data for the entered city.');
@@ -62,20 +79,42 @@ async function getThreeHourForecastByCity(lat, lon) {
 
 // Display 3-hour forecast (first 4 entries)
 function displayThreeHourForecast(data) {
-    let forecastHTML = '';
-    for (let i = 0; i < 4; i++) {
+    let forecastHTML = `
+        <table class="forecast-table">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Temperature</th>
+                    <th>Weather</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+    
+    for (let i = 0; i < 4; i++) { // Loop through the first 4 entries
         const forecast = data.list[i];
-        const date = new Date(forecast.dt * 1000).toLocaleString();
+        const date = new Date(forecast.dt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const temp = `${forecast.main.temp}°C`;
+        const weather = forecast.weather[0].description;
+        const icon = `http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`;
+
         forecastHTML += `
-            <div class="hourly-forecast">
-                <p>Time: ${date}, Temp: ${forecast.main.temp}°C</p>
-                <p>Weather: ${forecast.weather[0].description}</p>
-                <img src="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png" alt="Weather Icon">
-            </div>
+            <tr>
+                <td>${date}</td>
+                <td>${temp}</td>
+                <td><img src="${icon}" alt="Weather Icon" class="forecast-icon"> ${weather}</td>
+            </tr>
         `;
     }
+
+    forecastHTML += `
+            </tbody>
+        </table>
+    `;
+
     document.getElementById('hourlyForecast').innerHTML = forecastHTML;
 }
+
 
 // Plot hourly forecast on a graph
 function plotHourlyGraph(data) {
@@ -120,6 +159,7 @@ function plotHourlyGraph(data) {
     });
 }
 
+// Event listeners for search functionality
 document.getElementById('search-btn').addEventListener('click', () => {
     const city = document.getElementById('cityInput').value.trim();
     if (city) getWeatherByCity(city);

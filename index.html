@@ -7,29 +7,42 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="search-bar">
-            <input type="text" id="cityInput" placeholder="Enter city" />
-            <button id="search-btn">Search</button>
-        </div>
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <input type="text" id="cityInput" placeholder="Enter city" />
+        <button id="search-btn">Search</button>
+    </div>
 
-        <div class="current-weather">
-            <h2>Current Weather</h2>
+    <!-- Container for Weather and Map Data -->
+    <div class="container">
+        <!-- Current Weather Section -->
+        <div class="box current-weather">
+            <h2>CURRENT WEATHER</h2>
             <div id="currentWeather"></div>
         </div>
 
-        <div class="hourly-forecast">
-            <h2>3-Hour Forecast</h2>
-            <div id="hourlyForecast"></div>
-        </div>        
+        <!-- OpenStreetMap Section -->
+        <div class="box openstreet-map">
+            <h2>OPENSTREET MAP</h2>
+            <div id="map"></div>
+        </div>
 
-        <div class="hourly-forecast-graph">
-            <h2>3-Hour Forecast Graph</h2>
+        <!-- Hourly Forecast Section -->
+        <div class="box hourly-forecast">
+            <h2>Hourly forecast</h2>
+            <div id="hourlyForecast"></div>
+        </div>
+
+        <!-- Hourly Forecast Graph Section -->
+        <div class="box hourly-forecast-graph">
+            <h2>hourly forecast graph</h2>
             <canvas id="forecastGraph"></canvas>
-        </div>        
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="script.js"></script>
 </body>
 </html>

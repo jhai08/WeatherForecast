@@ -1,37 +1,121 @@
+/* General Body and Container Styling */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: #f7f9fc;
 }
 
 .container {
-    max-width: 800px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto auto;
+    gap: 20px;
+    max-width: 1200px;
     margin: 0 auto;
-    text-align: center;
 }
 
 .search-bar {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     margin-bottom: 20px;
 }
 
-.current-weather, .hourly-forecast, .hourly-forecast-graph {
-    margin: 20px 0;
+#cityInput {
+    width: 250px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#search-btn {
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-left: 0;
+    background-color: #1a73e8;
+    color: white;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#search-btn:hover {
+    background-color: #1558b3;
+}
+
+/* Box Styling */
+.box {
+    border: 1px solid #e0e0e0;
     padding: 20px;
-    border: 2px solid black;
     background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
 }
 
-.current-weather h2, .hourly-forecast h2, .hourly-forecast-graph h2 {
-    margin-bottom: 10px;
+/* Center Only the Titles */
+h2 {
+    font-size: 24px;
+    color: #333;
+    margin: 0; /* Remove default margin */
+    padding: 10px 0; /* Add some padding around the title */
+    text-align: center; /* Center the title text */
+    border-bottom: 2px solid #1a73e8; /* Add underline for emphasis */
+    width: 100%; /* Ensure title spans full width of container */
 }
 
-#currentWeather, #hourlyForecast {
-    font-size: 18px;
-    margin-top: 10px;
+/* Current Weather Section */
+.current-weather {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    height: 300px;
 }
 
-canvas {
+/* Map Styling */
+.openstreet-map {
+    position: relative;
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    height: 300px;
+}
+
+#map {
     width: 100%;
-    height: 400px;
+    height: 100%;
+    border-radius: 12px;
+}
+
+/* Hourly Forecast Styling */
+.hourly-forecast {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    height: 300px;
+    overflow-y: auto;
+}
+
+.hourly-forecast-graph {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    height: 300px;
+    overflow-y: auto;
+}
+
+/* Additional Styling for Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+
+    .box,
+    .openstreet-map,
+    .hourly-forecast,
+    .hourly-forecast-graph {
+        width: 100%;
+    }
+
+    #map {
+        height: 250px;
+    }
 }
