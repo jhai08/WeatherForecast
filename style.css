@@ -3,7 +3,7 @@ body {
     font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
     padding: 20px;
-    background-color: #f7f9fc;
+    background-color: #20b6bb;
 }
 
 .container {
@@ -35,7 +35,7 @@ body {
     padding: 10px 20px;
     border: 1px solid #ccc;
     border-left: 0;
-    background-color: #1a73e8;
+    background-color: #05899b;
     color: white;
     cursor: pointer;
     border-radius: 0 5px 5px 0;
@@ -43,14 +43,14 @@ body {
 }
 
 #search-btn:hover {
-    background-color: #1558b3;
+    background-color: #15aeb3;
 }
 
 /* Box Styling */
 .box {
     border: 1px solid #e0e0e0;
     padding: 20px;
-    background-color: white;
+    background-color: rgb(152, 236, 225);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 12px;
     position: relative;
@@ -61,14 +61,14 @@ body {
 /* Title Styling */
 h2 {
     font-size: 22px;
-    color: #333;
+    color: #ffffff;
     margin: 0;
     padding: 10px 0;
     text-align: center;
-    border-bottom: 2px solid #1a73e8;
+    border-bottom: 2px solid #1ae1e8;
     width: calc(100% - 40px);
     margin: 0 auto;
-    background: #fff;
+    background: #0b8f8f;
     z-index: 2;
     box-sizing: border-box;
 }
@@ -134,17 +134,17 @@ h2 {
 .hourly-forecast .forecast-table td {
     padding: 5px;
     text-align: center;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #065361;
     font-size: 20px;
 }
 
 .hourly-forecast .forecast-table th {
-    background-color: #f4f4f4;
+    background-color: #118fa0;
     font-weight: bold;
 }
 
 .hourly-forecast .forecast-table tbody tr:hover {
-    background-color: #f1f8ff;
+    background-color: #79f1e7;
 }
 
 .forecast-icon {

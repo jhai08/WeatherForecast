@@ -1,18 +1,26 @@
-const API_KEY = 'b1874e8463abeeb77801729dc9ce5eac'; // Your OpenWeatherMap API key
+const API_KEY = 'b1874e8463abeeb77801729dc9ce5eac';
 const CURRENT_WEATHER_URL = 'https://api.openweathermap.org/data/2.5/weather';
 const FORECAST_URL = 'https://api.openweathermap.org/data/2.5/forecast';
 
-let chartInstance; // Variable to store the chart instance
-let map; // Variable for the map instance
-let marker; // Variable for the marker
+let chartInstance;
+let map;
+let marker;
+let tempNewLayer; // New layer for temperature map
 
 // Initialize the map
 function initMap(lat, lon) {
     // Create map if it doesn't exist
     if (!map) {
-        map = L.map('map').setView([lat, lon], 13);
+        map = L.map('map').setView([lat, lon], 12);
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Add new temperature layer
+        tempNewLayer = L.tileLayer(`https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=${API_KEY}`, {
+            attribution: 'Weather data © OpenWeatherMap',
+            opacity: 0.5
         }).addTo(map);
     } else {
         // Update the map position
@@ -29,8 +37,8 @@ async function getWeatherByCity(city) {
         const data = await response.json();
         displayCurrentWeather(data);
         const { lat, lon } = data.coord;
-        await getThreeHourForecastByCity(lat, lon); // Fetch 3-hour forecast using latitude and longitude
-        initMap(lat, lon); // Initialize or update the map view with the current city coordinates
+        await getThreeHourForecastByCity(lat, lon);
+        initMap(lat, lon);
     } catch (error) {
         console.error('Error fetching weather data by city:', error.message);
         alert('Failed to fetch weather data for the entered city.');
@@ -66,8 +74,8 @@ async function getThreeHourForecastByCity(lat, lon) {
         const data = await response.json();
         
         if (data && data.list && data.list.length > 0) {
-            displayThreeHourForecast(data); // Display 3-hour forecast
-            plotHourlyGraph(data.list); // Plot the graph
+            displayThreeHourForecast(data);
+            plotHourlyGraph(data.list);
         } else {
             throw new Error('No valid forecast data received.');
         }
@@ -77,7 +85,7 @@ async function getThreeHourForecastByCity(lat, lon) {
     }
 }
 
-// Display 3-hour forecast (first 4 entries)
+// Display 3-hour forecast (first 6 entries)
 function displayThreeHourForecast(data) {
     let forecastHTML = `
         <table class="forecast-table">
@@ -91,7 +99,7 @@ function displayThreeHourForecast(data) {
             <tbody>
     `;
     
-    for (let i = 0; i < 6; i++) { // Loop through the first 4 entries
+    for (let i = 0; i < 6; i++) {
         const forecast = data.list[i];
         const date = new Date(forecast.dt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         const temp = `${forecast.main.temp}°C`;
@@ -115,14 +123,12 @@ function displayThreeHourForecast(data) {
     document.getElementById('hourlyForecast').innerHTML = forecastHTML;
 }
 
-
 // Plot hourly forecast on a graph
 function plotHourlyGraph(data) {
     const ctx = document.getElementById('forecastGraph').getContext('2d');
-    const times = data.slice(0, 6).map(forecast => new Date(forecast.dt * 1000).toLocaleTimeString()); // First 4 intervals
+    const times = data.slice(0, 6).map(forecast => new Date(forecast.dt * 1000).toLocaleTimeString());
     const temps = data.slice(0, 6).map(forecast => forecast.main.temp);
 
-    // Destroy the previous chart instance if it exists to avoid overlap
     if (chartInstance) {
         chartInstance.destroy();
     }
@@ -136,7 +142,7 @@ function plotHourlyGraph(data) {
                 data: temps,
                 borderColor: 'blue',
                 fill: false,
-                tension: 0.1 // Smooth the line
+                tension: 0.1
             }]
         },
         options: {
